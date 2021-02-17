@@ -4,13 +4,13 @@ models/Basic.java
  models.Basic
 models/BasicAndReversed.java
  models.BasicAndReversed
-models/Cloze.java
- models.Cloze
 models/Params.java
  models.Params
 models/Note.java
  models.Note
 models/AnkiRequestBody.java
  models.AnkiRequestBody
+models/Cloze.java
+ models.Cloze
 AnkiHelperApp.java
  AnkiHelperApp

@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-md-12 card-columns">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title"> Deck selection </h4>
+        <div class="btn-group-vertical btn-group-toggle list-group" ngbRadioGroup name="radioBasic" [(ngModel)]="selectedDeck">
+          <label ngbButtonLabel class="btn-outline-secondary" *ngFor="let deck of deckNames">
+            <input ngbButton type="radio" value="{{deck}}"> {{deck}}
+          </label>
+        </div>
+        <p>{{selectedDeck}}</p>
+      </div>
+      <div class="card-footer">
+        Step 1
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <p>card 2</p>
+      </div>
+      <div class="card-footer">
+        Step 2
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <p>card 3</p>
+      </div>
+      <div class="card-footer">
+        Step 3
+      </div>
+    </div>
+  </div>
+</div>
