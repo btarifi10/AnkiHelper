@@ -1,7 +1,10 @@
 package ankihelper.server;
 
+import ankihelper.server.models.AnkiResponseBody;
 import ankihelper.server.services.AnkiService;
 import ankihelper.server.services.FileStorageService;
+import models.AnkiRequestBody;
+import models.Params;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,12 +26,12 @@ public class ServerApplication implements CommandLineRunner {
         storageService.deleteAll();
         storageService.init();
 
-        String testRequest = "{ \"action\": \"version\", \"version\": 6 }";
+        AnkiRequestBody testRequest = new AnkiRequestBody("version", 6, new Params(null));
 
         AnkiService ankiService = new AnkiService();
 
-        String response = ankiService.makeAnkiAPICall(testRequest);
-        if (response == null || response.contains("\"error\": null")) {
+        AnkiResponseBody response = ankiService.makeAnkiAPICall(testRequest.toJSON());
+        if (response.getResult() == null) {
             throw new RuntimeException();
         }
     }

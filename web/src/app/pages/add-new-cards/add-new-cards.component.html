@@ -5,10 +5,11 @@
         <h4 class="card-title align-self-center"> Deck Selection </h4>
         <div class="btn-group-vertical btn-group-toggle list-group" ngbRadioGroup name="radioBasic" [(ngModel)]="selectedDeck">
           <label ngbButtonLabel class="btn-outline-secondary" *ngFor="let deck of deckNames">
-            <input ngbButton type="radio" value="{{deck}}"> {{deck}}
+            <input ngbButton type="radio" (click)="deckSelection(deck)" value="{{deck}}"> {{deck}}
           </label>
         </div>
-        <p>{{selectedDeck}}</p>
+        <br>
+        <h6 *ngIf="selectedDeck">Selected Deck: <b>{{selectedDeck}} </b></h6>
       </div>
       <div class="card-footer">
         Step 1
@@ -20,7 +21,7 @@
         <h4 class="card-title align-self-center"> Upload Files </h4>
         <app-upload-files></app-upload-files>
         <form class="form-inline">
-          <button type="submit" class="btn btn-primary">Continue</button>
+          <button type="submit" (click)="proceed()" class="btn btn-primary">Continue</button>
         </form>
       </div>
       <div class="card-footer">
@@ -29,9 +30,20 @@
     </div>
 
     <div class="card">
-      <div class="card-body">
+      <div class="card-body" *ngIf="stage==3">
         <h4 class="card-title align-self-center"> Review </h4>
-
+        <h6><i> The following cards will be created </i></h6>
+        <ul
+          class="list-group list-group-flush"
+          *ngFor="let card of cardTitlesToReview"
+        >
+          <li class="list-group-item">
+            {{card}}<span *ngIf="responses">: Created with Note ID {{responses[cardTitlesToReview.indexOf(card)]}}</span>
+          </li>
+        </ul>
+        <form class="form-inline">
+          <button type="submit" (click)="confirm()" class="btn btn-primary">Create Cards</button>
+        </form>
       </div>
       <div class="card-footer">
         Step 3

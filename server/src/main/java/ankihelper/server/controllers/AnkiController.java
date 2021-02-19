@@ -110,6 +110,8 @@ public class AnkiController {
             responses.add(ankiService.postClozeNoteToAnki(clozeNote, deckName));
         }
 
+        storageService.deleteAll();
+
         return responses;
     }
 
@@ -120,6 +122,12 @@ public class AnkiController {
         Resource file = storageService.load(filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @GetMapping("/decks")
+    @ResponseBody
+    public ArrayList<String> getDecks() {
+        return ankiService.getAllDecks();
     }
 
 }

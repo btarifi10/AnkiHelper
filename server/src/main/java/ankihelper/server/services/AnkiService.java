@@ -1,21 +1,31 @@
 package ankihelper.server.services;
 
+import ankihelper.server.models.AnkiResponseBody;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import models.AnkiRequestBody;
 import models.Note;
 import models.Params;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.ProxySelector;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 
 @Service
 public class AnkiService {
     public final String AnkiURL = "http://localhost:8765";
+    private final ObjectMapper objectMapper;
+
+    public AnkiService() {
+        this.objectMapper = new ObjectMapper();
+    }
 
     public String postClozeNoteToAnki(String clozeNote, String deckName){
 
@@ -29,16 +39,14 @@ public class AnkiService {
         String modelName = "Cloze";
         Note note = new Note(deckName, modelName, fields);
 
-        AnkiRequestBody requestBody = new AnkiRequestBody("addNote", "6", new Params(note));
+        AnkiRequestBody requestBody = new AnkiRequestBody("addNote", 6, new Params(note));
 
-        String response = makeAnkiAPICall(requestBody.toJSON());
+        AnkiResponseBody responseBody = makeAnkiAPICall(requestBody.toJSON());
 
-        if (response == null || response.contains("\"error\": null")) {
-            return "Anki API Call Failed";
-        } else return response.toString();
+        return String.valueOf(responseBody.getResult());
     }
 
-    public String makeAnkiAPICall(String requestBody) {
+    public AnkiResponseBody makeAnkiAPICall(String requestBody) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(AnkiURL))
@@ -54,12 +62,32 @@ public class AnkiService {
                     .build()
                     .send(request, HttpResponse.BodyHandlers.ofString());
 
-            return response.toString();
+            return bindJSONResponse(response);
+
         } catch (URISyntaxException | InterruptedException | IOException e) {
             e.printStackTrace();
         }
 
         return null;
 
+    }
+
+    public ArrayList<String> getAllDecks() {
+        AnkiRequestBody ankiRequestBody = new AnkiRequestBody("deckNames", 6, new Params(null));
+
+        AnkiResponseBody responseBody = makeAnkiAPICall(ankiRequestBody.toJSON());
+
+        return (ArrayList<String>) responseBody.getResult();
+    }
+
+    private AnkiResponseBody bindJSONResponse(HttpResponse<String> response) {
+        AnkiResponseBody responseBody = null;
+        try {
+            responseBody = objectMapper.readValue(response.body().toString(), AnkiResponseBody.class);
+            return responseBody;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

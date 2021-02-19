@@ -18,8 +18,6 @@ public class AnkiHelperApp {
     public ArrayList<String> analyzeNameAndDescribe(String filePath) {
         ArrayList<String> allPars = DOCXReader.getAllParagraphs(filePath);
 
-        // Make sure the Anki API is open and able to communicate.
-
         return scanDocumentForNameAndDescribe(allPars);
     }
 

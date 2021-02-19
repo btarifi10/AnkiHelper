@@ -2,10 +2,10 @@ package models;
 
 public class AnkiRequestBody {
     private String action;
-    private String version;
+    private int version;
     private Params params;
 
-    public AnkiRequestBody(String action, String version, Params params) {
+    public AnkiRequestBody(String action, int version, Params params) {
         this.action = action;
         this.version = version;
         this.params = params;
@@ -19,11 +19,11 @@ public class AnkiRequestBody {
         this.action = action;
     }
 
-    public String getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 
@@ -38,7 +38,7 @@ public class AnkiRequestBody {
     public String toJSON() {
         return "{" +
                 "\"action\":\"" + action + "\"," +
-                "\"version\":\"" + version + "\"," +
+                "\"version\":" + version + "," +
                 "\"params\":" + params.toJSON() +
                 "}";
     }

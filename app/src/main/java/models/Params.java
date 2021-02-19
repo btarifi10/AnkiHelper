@@ -16,6 +16,10 @@ public class Params {
     }
 
     public String toJSON() {
+        if (this.note == null) {
+            return "{}";
+        }
+
         return "{" +
                 "\"note\":" + note.toJSON() +
                 "}";
