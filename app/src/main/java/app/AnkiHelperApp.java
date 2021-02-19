@@ -1,50 +1,34 @@
-import filereader.DOCXReader;
-import models.AnkiRequestBody;
-import models.Note;
-import models.Params;
-import services.AnkiService;
+package app;
 
-import java.io.IOException;
-import java.net.ProxySelector;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import filereader.DOCXReader;
+
 import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
 public class AnkiHelperApp {
-    public static void main(String[] args) {
-        String filePath = "./data/simple.docx";
 
+    public static AnkiHelperApp initializeAnkiHelper() {
+        return new AnkiHelperApp();
+    }
+
+    AnkiHelperApp() {
+    }
+
+    public ArrayList<String> analyzeNameAndDescribe(String filePath) {
         ArrayList<String> allPars = DOCXReader.getAllParagraphs(filePath);
 
         // Make sure the Anki API is open and able to communicate.
-        if (!(testAnkiAPI())) {
-            System.out.println("Unable to communicate with Anki API.");
-            return;
-        }
 
-        scanDocumentForNameAndDescribe(allPars);
-
+        return scanDocumentForNameAndDescribe(allPars);
     }
 
-    private static boolean testAnkiAPI() {
-        String testRequest = "{ \"action\": \"version\", \"version\": 6 }";
 
-        String response = AnkiService.makeAnkiAPICall(testRequest);
-        if (response == null || response.contains("\"error\": null")) {
-            return false;
-        }
 
-        return true;
-    }
-
-    private static void scanDocumentForNameAndDescribe(ArrayList<String> allPars) {
+    private ArrayList<String> scanDocumentForNameAndDescribe(ArrayList<String> allPars) {
 
         ArrayList<Integer> nameAndDescribeIndices = new ArrayList<>();
+        ArrayList<String> clozeNotes = new ArrayList<>();
 
         final String ndLiteral = "Name and describe";
 
@@ -85,35 +69,13 @@ public class AnkiHelperApp {
             // Format the data adding the cloze markers, i.e. {{c1::cloze::hint}} and return a single string.
             String clozeNote = formatForCloze(nameAndDescribeTitle,nameAndDescribePairs, createMultiple);
 
-            // Make the HTTP Post Request to the Anki API.
-            postClozeNoteToAnki(clozeNote);
-
+            clozeNotes.add(clozeNote);
         }
+
+        return clozeNotes;
     }
 
-    private static void postClozeNoteToAnki(String clozeNote){
-
-        // Generates the Cloze Note fields. There are many optional fields so for now, this will just
-        // be done manually.
-
-        String fields = "{"+
-                "\"Text\":\"" + clozeNote + "\"," +
-                "\"Back Extra\": \"\" }";
-
-        Note note = new Note("Naruto", "Cloze", fields);
-
-        AnkiRequestBody requestBody = new AnkiRequestBody("addNote", "6", new Params(note));
-
-        String response = AnkiService.makeAnkiAPICall(requestBody.toJSON());
-
-        if (response == null || response.contains("\"error\": null")) {
-            System.out.println("API Call Failed");
-        } else System.out.println("API Call Success");
-
-
-    }
-
-    private static String formatForCloze(String nameAndDescribeTitle,
+    private String formatForCloze(String nameAndDescribeTitle,
                                          LinkedHashMap<String, String[]> nameAndDescribePairs,
                                          boolean createMultiple) {
 

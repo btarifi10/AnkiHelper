@@ -6,19 +6,24 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { AddNewCardsComponent } from './pages/add-new-cards/add-new-cards.component';
-import {FormsModule} from "@angular/forms";
+import { FormsModule } from "@angular/forms";
+import { UploadFilesComponent } from './pages/upload-files/upload-files.component';
+import { HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
     AppComponent,
     LandingPageComponent,
-    AddNewCardsComponent
+    AddNewCardsComponent,
+    UploadFilesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

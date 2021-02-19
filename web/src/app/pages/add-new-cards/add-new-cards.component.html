@@ -2,7 +2,7 @@
   <div class="col-md-12 card-columns">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title"> Deck selection </h4>
+        <h4 class="card-title align-self-center"> Deck Selection </h4>
         <div class="btn-group-vertical btn-group-toggle list-group" ngbRadioGroup name="radioBasic" [(ngModel)]="selectedDeck">
           <label ngbButtonLabel class="btn-outline-secondary" *ngFor="let deck of deckNames">
             <input ngbButton type="radio" value="{{deck}}"> {{deck}}
@@ -17,7 +17,11 @@
 
     <div class="card">
       <div class="card-body">
-        <p>card 2</p>
+        <h4 class="card-title align-self-center"> Upload Files </h4>
+        <app-upload-files></app-upload-files>
+        <form class="form-inline">
+          <button type="submit" class="btn btn-primary">Continue</button>
+        </form>
       </div>
       <div class="card-footer">
         Step 2
@@ -26,7 +30,8 @@
 
     <div class="card">
       <div class="card-body">
-        <p>card 3</p>
+        <h4 class="card-title align-self-center"> Review </h4>
+
       </div>
       <div class="card-footer">
         Step 3

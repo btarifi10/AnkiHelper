@@ -17,6 +17,10 @@ import java.util.stream.Stream;
 public class FileStorageService implements FileStorageServiceAPI{
     private final Path root = Paths.get("uploads");
 
+    public Path getRoot() {
+        return root;
+    }
+
     @Override
     public void init() {
         try {
@@ -54,6 +58,15 @@ public class FileStorageService implements FileStorageServiceAPI{
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(root.toFile());
+    }
+
+    @Override public
+    void deleteFile(String filename){
+        try {
+            Files.delete(root.resolve(filename));
+        } catch (IOException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
     }
 
     @Override

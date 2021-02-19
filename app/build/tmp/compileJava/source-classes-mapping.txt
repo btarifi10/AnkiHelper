@@ -12,5 +12,5 @@ models/AnkiRequestBody.java
  models.AnkiRequestBody
 models/Cloze.java
  models.Cloze
-AnkiHelperApp.java
- AnkiHelperApp
+app/AnkiHelperApp.java
+ app.AnkiHelperApp
