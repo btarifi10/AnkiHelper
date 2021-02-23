@@ -26,4 +26,7 @@ export class AnkiService {
     return this.http.get<AnkiResponseBody[]>(`${this.baseUrl}/confirm`);
   }
 
+  testConnection() : Observable<boolean>{
+    return this.http.get<boolean>(`${this.baseUrl}/test`);
+  }
 }

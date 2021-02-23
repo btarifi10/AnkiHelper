@@ -1,83 +1,97 @@
+<div class="container-fluid">
+  <div class="row justify-content-md-center">
+    <ngb-accordion class="col-md-6 w-50" #acc="ngbAccordion"
+                   [closeOthers]="true" activeIds="deck-select">
+      <ngb-panel id="deck-select">
+        <ng-template ngbPanelTitle>
+          <span> Step 1: Deck Selection </span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          <h4 class="align-self-center"> Deck Selection </h4>
 
+          <h6 class="font-weight-bold">Available decks: </h6>
+          <div class="btn-group-vertical btn-group-toggle list-group" ngbRadioGroup name="radioBasic"
+               [(ngModel)]="selectedDeck">
 
+            <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let deck of deckNames">
+              <input ngbButton type="radio" (click)="deckSelected()" value="{{deck}}">{{deck}}
+            </label>
+            <label ngbButtonLabel class="btn-outline-primary">
+              <input ngbButton type="radio" (click)="useDeckFromNotes()" value="">... or read the deck from the input
+            </label>
+          </div>
 
-<div class="row">
-  <div class="col-md-12 card-columns">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title align-self-center"> Deck Selection </h4>
+          <br>
+          <h6 class="font-weight-bold">Alternatively, create a new deck...</h6>
+          <div class="form-group form-inline">
+            <input type="text" placeholder="New deck name" class="form-control w-75" [(ngModel)]="newDeckName">
+            <button type="submit" class="btn btn-outline-success w-25" (click)="createNewDeck()">Create</button>
+          </div>
 
-        <h6 class="font-weight-bold">Available decks: </h6>
-        <div class="btn-group-vertical btn-group-toggle list-group" ngbRadioGroup name="radioBasic" [(ngModel)]="selectedDeck">
+          <br>
+          <h6 *ngIf="selectedDeck&&!newDeck">Cards will be added to <b>{{selectedDeck}}</b>.</h6>
+          <h6 *ngIf="selectedDeck&&newDeck">New deck <b>{{selectedDeck}}</b> will be created.</h6>
+          <h6 *ngIf="readDeckFromNotes">Deck will be read from input file.</h6>
 
-          <label ngbButtonLabel class="btn btn-outline-secondary" *ngFor="let deck of deckNames">
-            <input ngbButton type="radio" (click)="deckSelected()" value="{{deck}}">{{deck}}
-          </label>
-          <label ngbButtonLabel class="btn-outline-primary">
-            <input ngbButton type="radio" (click)="useDeckFromNotes()" value="">... or read the deck from the input
-          </label>
-        </div>
+          <hr/>
 
-        <br>
-        <h6 class="font-weight-bold">Alternatively, create a new deck...</h6>
-        <div class="form-group form-inline">
-          <input type="text" placeholder="New deck name" class="form-control w-75" [(ngModel)]="newDeckName">
-          <button type="submit" class="btn btn-outline-success w-25" (click)="createNewDeck()" >Create</button>
-        </div>
+          <button class="btn btn-sm btn-outline-primary mr-2"
+                  (click)="stage=2;
+              acc.toggle('deck-select');
+              acc.toggle('file-upload')"> Continue
+          </button>
+        </ng-template>
+      </ngb-panel>
 
-        <br>
-        <h6 *ngIf="selectedDeck&&!newDeck">Cards will be added to <b>{{selectedDeck}}</b>.</h6>
-        <h6 *ngIf="selectedDeck&&newDeck">New deck <b>{{selectedDeck}}</b> will be created.</h6>
-        <h6 *ngIf="readDeckFromNotes">Deck will be read from input file.</h6>
-      </div>
-      <div class="card-footer">
-        Step 1
-      </div>
-    </div>
+      <ngb-panel id="file-upload">
+        <ng-template ngbPanelTitle>
+          <span> Step 2: Upload Files </span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          <h4 class="align-self-center"> Upload Files </h4>
+          <app-upload-files></app-upload-files>
+          <hr/>
 
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title align-self-center"> Upload Files </h4>
-        <app-upload-files></app-upload-files>
-        <form class="form-inline">
-          <button type="submit" (click)="proceed()" class="btn btn-primary">Continue</button>
-        </form>
-      </div>
-      <div class="card-footer">
-        Step 2
-      </div>
-    </div>
+          <button class="btn btn-sm btn-outline-primary mr-2"
+                  (click)="acc.toggle('file-upload');
+                      stage=3;
+                      acc.toggle('review');
+                      proceed()">Continue
+          </button>
+        </ng-template>
+      </ngb-panel>
 
-    <div class="card">
-      <div class="card-body" *ngIf="stage==3">
-        <h4 class="card-title align-self-center"> Review </h4>
-        <h6><i> The following cards will be created </i></h6>
-        <table class="table small">
-          <thead>
-          <tr>
-            <th>Card</th>
-            <th>Deck</th>
-            <th>Type</th>
-            <th>Outcome</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let note of notesToBeAdded">
-            <td>{{getNoteFirstLine(note)}}</td>
-            <td>{{note.deckName}}</td>
-            <td>{{note.modelName}}</td>
-            <td *ngIf="!responses">Pending</td>
-            <td *ngIf="responses">{{getCardResponse(note)}}</td>
-          </tr>
-          </tbody>
-        </table>
-        <form class="form-inline">
-          <button type="submit" (click)="confirm()" class="btn btn-primary">Create Cards</button>
-        </form>
-      </div>
-      <div class="card-footer">
-        Step 3
-      </div>
-    </div>
+      <ngb-panel id="review">
+        <ng-template ngbPanelTitle>
+          <span> Step 3: Card Review </span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          <h4 class="card-title align-self-center"> Review </h4>
+          <h6><i> The following cards will be created </i></h6>
+          <table class="table small">
+            <thead>
+            <tr>
+              <th>Card</th>
+              <th>Deck</th>
+              <th>Type</th>
+              <th>Outcome</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let note of notesToBeAdded">
+              <td>{{getNoteFirstLine(note)}}</td>
+              <td>{{note.deckName}}</td>
+              <td>{{note.modelName}}</td>
+              <td *ngIf="!responses">Pending</td>
+              <td *ngIf="responses">{{getCardResponse(note)}}</td>
+            </tr>
+            </tbody>
+          </table>
+          <hr/>
+
+          <button class="btn btn-outline-primary mr-2" (click)="confirm()"> Create Cards</button>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
   </div>
 </div>

@@ -41,6 +41,14 @@ public class AnkiController {
         this.ankiManager = ankiManager;
     }
 
+    @GetMapping("/test")
+    @ResponseBody
+    public boolean testConnection() {
+        boolean active = ankiService.testConnection();
+
+        return active;
+    }
+
     @PostMapping("/upload")
     public ResponseEntity<ResponseMessage>
     uploadFile(@RequestParam("file") MultipartFile file) {

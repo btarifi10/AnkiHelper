@@ -107,4 +107,14 @@ public class AnkiService {
         }
         return null;
     }
+
+    public boolean testConnection() {
+        AnkiRequestBody testRequest = new AnkiRequestBody("version", 6, new Params(null));
+
+        AnkiResponseBody responseBody = makeAnkiAPICall(testRequest.toJSON());
+
+        if ((int) responseBody.getResult() == 6) {
+            return true;
+        } else return false;
+    }
 }

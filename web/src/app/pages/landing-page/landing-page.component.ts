@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AnkiService} from "../../services/anki.service";
 
 @Component({
   selector: 'app-landing-page',
@@ -6,10 +7,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./landing-page.component.css']
 })
 export class LandingPageComponent implements OnInit {
+  active: boolean;
 
-  constructor() { }
+  constructor(private ankiService : AnkiService) { }
 
   ngOnInit(): void {
+    this.checkConnection();
   }
 
+
+  checkConnection() {
+    this.ankiService.testConnection().subscribe(status => {
+      this.active = status;
+    })
+  }
 }
