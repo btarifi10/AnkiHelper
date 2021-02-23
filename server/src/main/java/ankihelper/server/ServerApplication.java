@@ -23,7 +23,7 @@ public class ServerApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(ServerApplication.class, args);
-        openHomePage();
+       // openHomePage();
     }
 
     @Override
@@ -32,6 +32,7 @@ public class ServerApplication implements CommandLineRunner {
         storageService.init();
     }
 
+    /*
     private static void openHomePage() {
         try {
             Runtime rt = Runtime.getRuntime();
@@ -40,4 +41,5 @@ public class ServerApplication implements CommandLineRunner {
             e.printStackTrace();
         }
     }
+    */
 }
