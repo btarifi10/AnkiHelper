@@ -113,8 +113,9 @@ public class AnkiService {
 
         AnkiResponseBody responseBody = makeAnkiAPICall(testRequest.toJSON());
 
-        if ((int) responseBody.getResult() == 6) {
-            return true;
-        } else return false;
+        if (responseBody==null || responseBody.getResult()==null)
+            return false;
+
+        return true;
     }
 }

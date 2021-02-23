@@ -25,14 +25,5 @@ public class ServerApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         storageService.deleteAll();
         storageService.init();
-
-        AnkiRequestBody testRequest = new AnkiRequestBody("version", 6, new Params(null));
-
-        AnkiService ankiService = new AnkiService();
-
-        AnkiResponseBody response = ankiService.makeAnkiAPICall(testRequest.toJSON());
-        if (response.getResult() == null) {
-            throw new RuntimeException();
-        }
     }
 }

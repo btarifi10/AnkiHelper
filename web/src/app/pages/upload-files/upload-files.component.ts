@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {UploadFileService} from "../../services/upload-file.service";
 import {HttpEventType, HttpResponse} from "@angular/common/http";
+import {FileInfo} from "../../models/FileInfo";
 
 @Component({
   selector: 'app-upload-files',
@@ -15,14 +16,16 @@ export class UploadFilesComponent implements OnInit {
   progress = 0;
   message = '';
 
-  fileInfos: Observable<any>;
+  fileInfos: FileInfo[];
   nameDisplay: string = "No file selected";
 
   constructor(private uploadService: UploadFileService) {
   }
 
   ngOnInit(): void {
-    this.fileInfos = this.uploadService.getFiles();
+    this.uploadService.getFiles().subscribe(files => {
+      this.fileInfos = files;
+    });
   }
 
   selectFile(event): void {
@@ -40,7 +43,9 @@ export class UploadFilesComponent implements OnInit {
           this.progress = Math.round(100 * event.loaded / event.total);
         } else if (event instanceof HttpResponse) {
           this.message = event.body.message;
-          this.fileInfos = this.uploadService.getFiles();
+          this.uploadService.getFiles().subscribe(files => {
+            this.fileInfos = files;
+          })
         }
       },
       error => {
@@ -49,7 +54,6 @@ export class UploadFilesComponent implements OnInit {
         this.currentFile = undefined;
       });
     this.selectedFiles = undefined;
-    this.fileInfos = this.uploadService.getFiles();
   }
 
   deleteFile(filename: string) {
@@ -61,6 +65,8 @@ export class UploadFilesComponent implements OnInit {
         console.log("Could not delete the file!");
       });
 
-    this.fileInfos = this.uploadService.getFiles();
+    this.uploadService.getFiles().subscribe(files => {
+      this.fileInfos = files;
+    });
   }
 }
