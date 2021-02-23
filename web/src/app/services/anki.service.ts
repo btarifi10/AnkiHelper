@@ -9,7 +9,7 @@ import {Note} from "../models/Note";
 })
 export class AnkiService {
 
-  private baseUrl = 'http://localhost:8080';
+  private baseUrl = '/api';
 
   constructor(private http: HttpClient) { }
 

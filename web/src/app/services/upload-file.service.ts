@@ -8,7 +8,7 @@ import {FileInfo} from "../models/FileInfo";
 })
 export class UploadFileService {
 
-  private baseUrl = 'http://localhost:8080';
+  private baseUrl = '/api';
 
   constructor(private http: HttpClient) { }
 

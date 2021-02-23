@@ -1,13 +1,9 @@
-Front: One
-Back: One
+$Front: What is Naruto’s Surname?
+Back: Uzumaki
 
-Front: Two
-Hmmm
-
-Back: Two
-Blah blah
+(Front: Who were the members of Team 7?
+0Back: Naruto</br>Sasuke</br>Sakura</br>Kakashi
 
-Front: Three
-Back: Three
-Hello Blah
+?Front: Which tailed beast does Naruto have sealed within him?
+%Back: Kyuubi, the Nine Tailed Beast
 
