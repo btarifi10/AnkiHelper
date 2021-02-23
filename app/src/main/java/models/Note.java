@@ -3,12 +3,14 @@ package models;
 public class Note {
     private String deckName;
     private String modelName;
-    private String fields;
+    private String front;
+    private String back;
 
-    public Note(String deckName, String modelName, String fields) {
+    public Note(String deckName, String modelName, String front, String back) {
         this.deckName = deckName;
         this.modelName = modelName;
-        this.fields = fields;
+        this.front = front;
+        this.back = back;
     }
 
     public String getDeckName() {
@@ -27,15 +29,37 @@ public class Note {
         this.modelName = modelName;
     }
 
-    public String getFields() {
-        return fields;
+    public String getFront() {
+        return front;
     }
 
-    public void setFields(String fields) {
-        this.fields = fields;
+    public void setFront(String front) {
+        this.front = front;
+    }
+
+    public String getBack() {
+        return back;
+    }
+
+    public void setBack(String back) {
+        this.back = back;
     }
 
     public String toJSON() {
+        String fields = "";
+
+        if (modelName.equals("Cloze")) {
+            fields = "{"+
+                    "\"Text\":\"" + front + "\"," +
+                    "\"Back Extra\":\"" + back +
+                    "\"}";
+        } else {
+            fields = "{"+
+                    "\"Front\":\"" + front + "\"," +
+                    "\"Back\":\"" + back +
+                    "\"}";
+        }
+
         return "{" +
                 "\"deckName\":\"" + deckName + "\"" +
                 ",\"modelName\":\"" + modelName + "\"" +

@@ -32,6 +32,7 @@ public class FileStorageService implements FileStorageServiceAPI{
 
     @Override
     public void save(MultipartFile file) {
+
         try {
             Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
         } catch (Exception e) {

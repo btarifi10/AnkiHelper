@@ -17,6 +17,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AnkiService {
@@ -27,23 +28,39 @@ public class AnkiService {
         this.objectMapper = new ObjectMapper();
     }
 
-    public String postClozeNoteToAnki(String clozeNote, String deckName){
+    public AnkiResponseBody postNoteToAnki(Note note){
 
         // Generates the Cloze Note fields. There are many optional fields so for now, this will just
         // be done manually.
 
-        String fields = "{"+
-                "\"Text\":\"" + clozeNote + "\"," +
-                "\"Back Extra\": \"\" }";
-
-        String modelName = "Cloze";
-        Note note = new Note(deckName, modelName, fields);
+        if (!deckExists(note.getDeckName()))
+        {
+            createDeck(note.getDeckName());
+        }
 
         AnkiRequestBody requestBody = new AnkiRequestBody("addNote", 6, new Params(note));
 
         AnkiResponseBody responseBody = makeAnkiAPICall(requestBody.toJSON());
 
-        return String.valueOf(responseBody.getResult());
+        return responseBody;
+    }
+
+    private void createDeck(String deckName) {
+        String requestBody = "{" +
+                "\"action\": \"createDeck\"," +
+                "    \"version\": 6," +
+                "    \"params\": {" +
+                "        \"deck\": \""+ deckName + "\"" +
+                "    } " +
+                "}";
+
+        makeAnkiAPICall(requestBody);
+    }
+
+    public boolean deckExists(String deckName) {
+        ArrayList<String> deckNames = getAllDecks();
+
+        return deckNames.contains(deckName);
     }
 
     public AnkiResponseBody makeAnkiAPICall(String requestBody) {

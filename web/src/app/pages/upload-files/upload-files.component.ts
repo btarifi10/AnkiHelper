@@ -49,6 +49,7 @@ export class UploadFilesComponent implements OnInit {
         this.currentFile = undefined;
       });
     this.selectedFiles = undefined;
+    this.fileInfos = this.uploadService.getFiles();
   }
 
   deleteFile(filename: string) {

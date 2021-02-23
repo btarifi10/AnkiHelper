@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpEvent, HttpRequest} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {AnkiResponseBody} from "../models/AnkiResponseBody";
+import {Note} from "../models/Note";
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +17,13 @@ export class AnkiService {
     return this.http.get(`${this.baseUrl}/decks`);
   }
 
-  proceed(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/proceed`);
+  proceed(selectedDeck: string): Observable<Note[]> {
+    return this.http.get<Note[]>(`${this.baseUrl}/proceed?deckName=${selectedDeck}`);
+
   }
 
-  confirm(selectedDeck: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/confirm?deckName=${selectedDeck}`);
+  confirm(): Observable<AnkiResponseBody[]> {
+    return this.http.get<AnkiResponseBody[]>(`${this.baseUrl}/confirm`);
   }
 
 }

@@ -2,9 +2,11 @@ package ankihelper.server.controllers;
 
 import ankihelper.server.managers.AnkiManager;
 import ankihelper.server.messages.ResponseMessage;
+import ankihelper.server.models.AnkiResponseBody;
 import ankihelper.server.models.FileInfo;
 import ankihelper.server.services.AnkiService;
 import ankihelper.server.services.FileStorageService;
+import models.Note;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.lang.reflect.Array;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +33,9 @@ public class AnkiController {
     AnkiManager ankiManager;
 
     private ArrayList<String> clozeNotes;
+    private ArrayList<String[]> basicNotes;
+    private ArrayList<String[]> reversedNotes;
+    private ArrayList<Note> notesFound;
 
     public AnkiController(AnkiManager ankiManager) {
         this.ankiManager = ankiManager;
@@ -82,35 +88,42 @@ public class AnkiController {
 
     @GetMapping("/proceed")
     @ResponseBody
-    public ArrayList<String> analyseFiles() {
+    public ArrayList<Note> analyseFiles(@RequestParam String deckName) {
 
         ArrayList<String> fileNames = storageService.loadAll().map(path->storageService.getRoot().resolve(path).toString())
                 .collect(Collectors.toCollection(ArrayList::new));
 
         this.clozeNotes = new ArrayList<>();
+        this.basicNotes = new ArrayList<>();
+        this.reversedNotes = new ArrayList<>();
+        this.notesFound = new ArrayList<>();
         for (String file : fileNames) {
-                this.clozeNotes.addAll(ankiManager.performNameAndDescribeAnalysis(file));
+            ankiManager.processFile(file, deckName);
+            this.notesFound.addAll(ankiManager.getClozeNotes());
+            this.notesFound.addAll(ankiManager.getBasicNotes());
+            this.notesFound.addAll(ankiManager.getReversedNotes());
         }
 
 
-        ArrayList<String> clozeNoteTitles = new ArrayList<>();
-        for (String note : clozeNotes) {
-            clozeNoteTitles.add(note.split("</br")[0]);
+        ArrayList<String> noteTitles = new ArrayList<>();
+        for (Note note : notesFound) {
+            noteTitles.add(note.getFront().split("</br")[0]);
         }
 
-        return clozeNoteTitles;
+        return notesFound;
     }
 
     @GetMapping("/confirm")
     @ResponseBody
-    public ArrayList<String> createCards(@RequestParam String deckName) {
-        ArrayList<String> responses = new ArrayList<>();
+    public List<AnkiResponseBody> createCards() {
+        ArrayList<AnkiResponseBody> responses = new ArrayList<>();
 
-        for (String clozeNote : this.clozeNotes) {
-            responses.add(ankiService.postClozeNoteToAnki(clozeNote, deckName));
+        for (Note note : notesFound) {
+            responses.add(ankiService.postNoteToAnki(note));
         }
 
         storageService.deleteAll();
+        storageService.init();
 
         return responses;
     }

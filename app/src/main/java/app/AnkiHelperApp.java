@@ -1,12 +1,17 @@
 package app;
 
 import filereader.DOCXReader;
+import models.Note;
 
 import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
 public class AnkiHelperApp {
+
+    private ArrayList<String> allPars;
+    private boolean deckIncluded;
+    private String deckName;
 
     public static AnkiHelperApp initializeAnkiHelper() {
         return new AnkiHelperApp();
@@ -15,18 +20,91 @@ public class AnkiHelperApp {
     AnkiHelperApp() {
     }
 
-    public ArrayList<String> analyzeNameAndDescribe(String filePath) {
-        ArrayList<String> allPars = DOCXReader.getAllParagraphs(filePath);
+    public void analyzeDocument(String filePath, String deckName) {
+        this.allPars = DOCXReader.getAllParagraphs(filePath);
+        this.deckName = deckName;
+        this.deckIncluded = false;
+    }
 
-        return scanDocumentForNameAndDescribe(allPars);
+    public void analyzeDocument(String filePath) {
+        this.allPars = DOCXReader.getAllParagraphs(filePath);
+        this.deckIncluded = true;
+    }
+
+    public ArrayList<Note> analyzeNameAndDescribe() {
+       return scanDocumentForNameAndDescribe();
+    }
+
+    public ArrayList<Note> analyzeBasicFormat() {
+        return scanDocumentForBasicFormat("Basic");
+    }
+
+    public ArrayList<Note> analyzeReversedFormat() {
+        return scanDocumentForBasicFormat("Reversed");
+    }
+
+    private ArrayList<Note> scanDocumentForBasicFormat(String keyword) {
+
+        ArrayList<Integer> basicIndices = new ArrayList<>();
+        ArrayList<Note> basicNotes = new ArrayList<Note>();
+
+        final String sideMarker = "/";
+        final String noteMarker = "//";
+
+        // Find Name and describe commands.
+        for (String par : allPars) {
+            if (par.startsWith(keyword)) {
+                basicIndices.add(allPars.indexOf(par));
+            }
+        }
+
+        for (int index : basicIndices) {
+            ArrayList<Integer> sideMarkerIndices = new ArrayList<>();
+            ArrayList<Integer> noteMarkerIndices = new ArrayList<>();
+
+            int basicNoteCount = 0;
+
+            int numItems = parseInt(allPars.get(index+1).replaceAll("[\\D]", ""));
+            int i = index;
+
+            if (deckIncluded) {
+                this.deckName = allPars.get(index+1).substring(allPars.get(index+1).indexOf(" "));
+            }
+
+            while (basicNoteCount < numItems) {
+                i++;
+                if (allPars.get(i).equals(sideMarker)) {
+                    sideMarkerIndices.add(i);
+                }
+                if (allPars.get(i).equals(noteMarker)) {
+                    noteMarkerIndices.add(i);
+                    basicNoteCount++;
+                }
+            }
+
+            i = index+2;
+
+            for (int j = 0; j < sideMarkerIndices.size(); j++) {
+                String front = String.join("</br>", allPars.subList(i,sideMarkerIndices.get(j)));
+                String back = String.join("</br>", allPars.subList(sideMarkerIndices.get(j)+1, noteMarkerIndices.get(j)));
+                i = noteMarkerIndices.get(j)+1;
+
+                String model = keyword.equals("Basic")?"Basic":"Basic (and reversed card)";
+                Note note = new Note(deckName, model, front, back);
+
+                basicNotes.add(note);
+            }
+        }
+
+        return basicNotes;
+
     }
 
 
-
-    private ArrayList<String> scanDocumentForNameAndDescribe(ArrayList<String> allPars) {
+    private ArrayList<Note> scanDocumentForNameAndDescribe() {
 
         ArrayList<Integer> nameAndDescribeIndices = new ArrayList<>();
-        ArrayList<String> clozeNotes = new ArrayList<>();
+        ArrayList<Note> clozeNotes = new ArrayList<>();
 
         final String ndLiteral = "Name and describe";
 
@@ -44,6 +122,10 @@ public class AnkiHelperApp {
             boolean createMultiple = false;
             if (allPars.get(index+1).contains("M")) {
                 createMultiple = true;
+            }
+
+            if (deckIncluded) {
+                this.deckName = allPars.get(index+1).substring(allPars.get(index+1).indexOf(" "));
             }
 
             // Extract the title.
@@ -65,7 +147,9 @@ public class AnkiHelperApp {
             }
 
             // Format the data adding the cloze markers, i.e. {{c1::cloze::hint}} and return a single string.
-            String clozeNote = formatForCloze(nameAndDescribeTitle,nameAndDescribePairs, createMultiple);
+            String clozeNoteText = formatForCloze(nameAndDescribeTitle,nameAndDescribePairs, createMultiple);
+
+            Note clozeNote = new Note(deckName, "Cloze", clozeNoteText, "");
 
             clozeNotes.add(clozeNote);
         }

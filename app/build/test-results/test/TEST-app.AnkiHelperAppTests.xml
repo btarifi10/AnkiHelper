@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.AnkiHelperAppTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-02-22T11:42:48" hostname="BASHEQT-PC" time="0.746">
+  <properties/>
+  <testcase name="basicNoteGeneration()" classname="app.AnkiHelperAppTests" time="0.746"/>
+  <system-out><![CDATA[Front: One
+Back: One
+
+Front: Two
+Hmmm
+Back: Two
+Blah blah
+
+Front: Three
+Back: Three
+Hello Blah
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
