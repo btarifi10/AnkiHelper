@@ -4,8 +4,6 @@ models/Basic.java
  models.Basic
 models/BasicAndReversed.java
  models.BasicAndReversed
-models/Cloze.java
- models.Cloze
 models/Params.java
  models.Params
 models/Note.java
@@ -14,3 +12,5 @@ models/AnkiRequestBody.java
  models.AnkiRequestBody
 app/AnkiHelperApp.java
  app.AnkiHelperApp
+models/Cloze.java
+ models.Cloze

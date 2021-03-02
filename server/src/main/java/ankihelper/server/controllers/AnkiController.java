@@ -41,6 +41,13 @@ public class AnkiController {
         this.ankiManager = ankiManager;
     }
 
+    @GetMapping("/home")
+    @ResponseBody
+    public ResponseEntity<String> home() {
+        System.out.println("Cool");
+        return ResponseEntity.status(HttpStatus.OK).body("Active");
+    }
+
     @GetMapping("/test")
     @ResponseBody
     public boolean testConnection() {

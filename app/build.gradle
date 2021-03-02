@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'com.anki.Anki-Helper'
+group 'com.anki.AnkiHelper'
 version '1.0-SNAPSHOT'
 
 repositories {

@@ -4,7 +4,7 @@ plugins {
     id 'java'
 }
 
-group = 'com.anki.Anki-Helper'
+group = 'com.anki.AnkiHelper'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '15'
 
@@ -14,12 +14,13 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation(project(':app'))
 }
 
+
 test {
     useJUnitPlatform()
 }
-
