@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="app.AnkiHelperAppTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-02-23T12:21:23" hostname="BASHEQT-PC" time="0.37">
+<testsuite name="app.AnkiHelperAppTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-03-03T19:08:54" hostname="DELL-BTARIFI10" time="0.031">
   <properties/>
-  <testcase name="basicNoteGeneration()" classname="app.AnkiHelperAppTests" time="0.37"/>
-  <system-out><![CDATA[Front: What is Naruto’s Surname?
-Back: Uzumaki
-
-Front: Who were the members of Team 7?
-Back: Naruto</br>Sasuke</br>Sakura</br>Kakashi
-
-Front: Which tailed beast does Naruto have sealed within him?
-Back: Kyuubi, the Nine Tailed Beast
-
+  <testcase name="test()" classname="app.AnkiHelperAppTests" time="0.031"/>
+  <system-out><![CDATA[test
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
