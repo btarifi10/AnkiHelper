@@ -1,3 +1,4 @@
-rootProject.name = 'Anki-Helper'
+rootProject.name = 'AnkiHelper'
 include 'app', 'server', 'web'
+include 'wrapper-ui'
 
