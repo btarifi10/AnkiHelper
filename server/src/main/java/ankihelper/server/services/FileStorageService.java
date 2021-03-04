@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 @Service
 public class FileStorageService implements FileStorageServiceAPI{
     private final Path root = Paths.get("uploads");
+    private final Path exampleRoot = Paths.get("examples");
 
     public Path getRoot() {
         return root;
@@ -56,6 +57,21 @@ public class FileStorageService implements FileStorageServiceAPI{
         }
     }
 
+    public Resource loadExample(String filename) {
+        try {
+            Path file = exampleRoot.resolve(filename);
+            Resource resource = new UrlResource(file.toUri());
+
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Could not read the file!");
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+    }
+
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(root.toFile());
@@ -74,6 +90,14 @@ public class FileStorageService implements FileStorageServiceAPI{
     public Stream<Path> loadAll() {
         try {
             return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not load the files!");
+        }
+    }
+
+    public Stream<Path> loadExampleFiles() {
+        try {
+            return Files.walk(this.exampleRoot, 1).filter(path -> !path.equals(this.exampleRoot)).map(this.exampleRoot::relativize);
         } catch (IOException e) {
             throw new RuntimeException("Could not load the files!");
         }

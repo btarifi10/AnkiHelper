@@ -9,13 +9,17 @@ import { AddNewCardsComponent } from './pages/add-new-cards/add-new-cards.compon
 import { FormsModule } from "@angular/forms";
 import { UploadFilesComponent } from './pages/upload-files/upload-files.component';
 import { HttpClientModule} from "@angular/common/http";
+import { HelpComponent } from './pages/help/help.component';
+import { AboutComponent } from './pages/about/about.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LandingPageComponent,
     AddNewCardsComponent,
-    UploadFilesComponent
+    UploadFilesComponent,
+    HelpComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

@@ -38,4 +38,8 @@ export class UploadFileService {
   getFiles(): Observable<FileInfo[]> {
     return this.http.get<FileInfo[]>(`${this.baseUrl}/files`);
   }
+
+  getExampleFiles(): Observable<FileInfo[]> {
+    return this.http.get<FileInfo[]>(`${this.baseUrl}/exampleFiles`);
+  }
 }

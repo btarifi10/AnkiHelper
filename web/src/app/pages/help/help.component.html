@@ -1,0 +1,121 @@
+<div class="container-fluid">
+  <div class="row justify-content-center">
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card-body">
+        <h3> First things first </h3>
+        <p>
+          Before you can use this app, ensure that <i>Anki</i> is running and that the <a
+          href="https://ankiweb.net/shared/info/2055492159"><i>Anki Connect</i></a> add-on is
+          installed. If it isn't, click the link and follow the instructions to downloading it.<br><br>
+
+          Also, this app only works with Microsoft Word documents that have a <i>.docx</i> file extension. This
+          shouldn't be
+          a problem unless you are using a very old version of Word. If you are, and have <i>.doc</i> file extension,
+          you
+          can use an online tool like <a href="https://www.zamzar.com/convert/doc-to-docx/">this</a> one to convert it.
+          <br><br>
+          Once you have started, you will need to follow three steps in order to create cards using this app.
+        </p>
+        <hr/>
+        <br>
+        <h4>Step 1</h4>
+        <p>
+          The first step is to choose the deck that you will be adding cards to. There are three options here:
+        </p>
+        <ul>
+          <li>Choose a deck from the list of decks presented. This will mean that all notes processed from files
+            will be added to this deck.
+          </li>
+          <li>Read the deck from the Word document. This will mean each group in your Word document will need to
+            have the deck name in the second line, after the number of items in the group. Note that each group will
+            need to be assigned to one deck at most, but you can have multiple groups within the same Word document if
+            you select this option. If the deck name given does not exist, it will be created.
+          </li>
+          <li>Create a new deck. This is the same as the first option except a new deck will be created.</li>
+        </ul>
+
+      </div>
+    </div>
+
+    <div class="col-md-10">
+      <div class="card-body">
+        <h3> Files and templates </h3>
+
+        <h4>Step 2</h4>
+        <p>
+          Step 2 involves selecting and uploading any number of <i>.docx</i> files which will be scanned and analysed
+          for
+          cards/notes to be created. Simply upload the files one by one and click on the button to proceed.
+        </p>
+        <h4>Templates</h4>
+        <p>
+          For each group of notes you wish to create in Anki, a template has to be followed. Currently, this app
+          supports templates which create notes of three models: Cloze, Basic, and Basic with reversed.<br><br>
+
+          In each template, the first line of the group starts with a keyword, and the second line includes the
+          number of items as well as the optional deck (see <i>Step 1</i>).<br><br>
+
+          Check the example files to get a quicker understanding of the formats.
+        </p>
+        <h5>Cloze notes</h5>
+        <p>
+          The Cloze note template follows a "Name and describe" format. As such, the first line of a group has the
+          format:
+          <br>
+          <span class="text-center"> Name and describe the [<i>title/heading of card</i>]. </span>
+        </p>
+
+        The second line will have a number, an optional letter "M", and then the deck name if necessary:
+        <ul>
+          <li>The number indicates how many items are present, each separated by pressing the "enter/newline" key in
+            word
+          </li>
+          <li>The M, if there should be more than two cloze deletions (more on this).</li>
+          <li>The optional deck name</li>
+        </ul>
+
+        The following <i>N</i> lines (where N is the number in the second line) are of the format <br>
+        <span class="text-center">[<i>name</i>]: [<i>description item 1</i>]; [<i>description item 2</i>];
+          ... ; [<i>description item n</i>] </span>
+        <br>
+        If the "M" is not present, then a cloze note with all the names missing would be created, as well as one with
+        all the
+        descriptions (so two cards would be created). If the "M" is present, a first cloze note with be created with all
+        the names missing, and one subsequent cloze note
+        for each item's description (so N+1 cards would be created). This option is intended for longer, more detailed
+        descriptions while
+        keeping the bigger picture.
+        <br><br>
+
+        <a href="{{exampleFiles[0].url}}"> Download example file </a>
+        <hr/>
+
+
+        <h5>Basic, and Reversed</h5>
+        In the case of Basic, or Basic and reversed, the format is simpler. The first line contains either the word
+        "Basic" or "Reversed", and the second line contains the number of items as well as the optional deck input.
+
+        Following this, the two sides of each card are to be separated by a line with single foward slash ("/") and each
+        card
+        is separated by a line with a double foward slash ("//").
+        <br><br>
+
+        <a href="{{exampleFiles[1].url}}"> Download example file </a>
+
+        <hr/>
+
+        <h4>Step 3</h4>
+        <p>
+          All that's left to do is to review the cards being made and hit the confirmation button. Any error messages
+          will be shown in this step.
+          <br><br>
+          Note that this app allows for text-only card creation at this point in time. If you wish to add images, or
+          format the cards, you may do so after they are created.
+
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

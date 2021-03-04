@@ -41,6 +41,12 @@ public class AnkiController {
         this.ankiManager = ankiManager;
     }
 
+    @GetMapping("/home")
+    @ResponseBody
+    public ResponseEntity<String> home() {
+        return ResponseEntity.status(HttpStatus.OK).body("Active");
+    }
+
     @GetMapping("/test")
     @ResponseBody
     public boolean testConnection() {
@@ -70,6 +76,19 @@ public class AnkiController {
             String filename = path.getFileName().toString();
             String url = MvcUriComponentsBuilder
                     .fromMethodName(AnkiController.class, "getFile", path.getFileName().toString()).build().toString();
+
+            return new FileInfo(filename, url);
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
+    }
+
+    @GetMapping("/exampleFiles")
+    public ResponseEntity<List<FileInfo>> getExampleFiles() {
+        List<FileInfo> fileInfos = storageService.loadExampleFiles().map(path -> {
+            String filename = path.getFileName().toString();
+            String url = MvcUriComponentsBuilder
+                    .fromMethodName(AnkiController.class, "getFile", "examples/"+path.getFileName().toString()).build().toString();
 
             return new FileInfo(filename, url);
         }).collect(Collectors.toList());
@@ -141,6 +160,14 @@ public class AnkiController {
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
         Resource file = storageService.load(filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @GetMapping("/files/examples/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> getExampleFile(@PathVariable String filename) {
+        Resource file = storageService.loadExample(filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }

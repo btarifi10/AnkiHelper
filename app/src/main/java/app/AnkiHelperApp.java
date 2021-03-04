@@ -120,7 +120,7 @@ public class AnkiHelperApp {
             int numItems = parseInt(allPars.get(index+1).replaceAll("[\\D]", ""));
 
             boolean createMultiple = false;
-            if (allPars.get(index+1).contains("M")) {
+            if (allPars.get(index+1).split(" ")[0].contains("M")) {
                 createMultiple = true;
             }
 
