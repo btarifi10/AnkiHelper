@@ -18,3 +18,9 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+jar {
+    manifest {
+        from './src/main/resources/META-INF/MANIFEST.MF'
+    }
+}

@@ -10,6 +10,8 @@ import javax.swing.JFrame;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.ProxySelector;
 import java.net.URI;
@@ -98,14 +100,19 @@ public class AnkiWrapperGui extends JFrame {
         init();
 
         this.getContentPane().add(mainPanel);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent event) {
+                exitProcedure();
+            }
+        });
         this.pack();
 
         btnStopApp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                shutdownSpringBootServer();
-                System.exit(0);
+                exitProcedure();
             }
         });
         btnOpen.addActionListener(new ActionListener() {
@@ -120,6 +127,11 @@ public class AnkiWrapperGui extends JFrame {
                 }
             }
         });
+    }
+
+    private void exitProcedure() {
+        shutdownSpringBootServer();
+        System.exit(0);
     }
 
     private void shutdownSpringBootServer() {
@@ -142,7 +154,7 @@ public class AnkiWrapperGui extends JFrame {
     }
 
     private void init() {
-        ImageIcon image = new ImageIcon("./wrapper-ui/src/main/resources/static/biglogo.png");
+        ImageIcon image = new ImageIcon("./biglogo.png");
         Image img = image.getImage().getScaledInstance(50,50,Image.SCALE_SMOOTH);
 
         setLocationRelativeTo(null);
