@@ -10,7 +10,7 @@ models/Note.java
  models.Note
 models/AnkiRequestBody.java
  models.AnkiRequestBody
-models/Cloze.java
- models.Cloze
 app/AnkiHelperApp.java
  app.AnkiHelperApp
+models/Cloze.java
+ models.Cloze

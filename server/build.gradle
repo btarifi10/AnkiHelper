@@ -4,7 +4,7 @@ plugins {
     id 'java'
 }
 
-group = 'com.anki.AnkiHelper'
+group = 'AnkiHelper'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '15'
 
@@ -24,3 +24,4 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
