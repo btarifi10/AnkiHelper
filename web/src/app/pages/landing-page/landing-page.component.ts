@@ -15,10 +15,14 @@ export class LandingPageComponent implements OnInit {
     this.checkConnection();
   }
 
-
   checkConnection() {
-    this.ankiService.testConnection().subscribe(status => {
-      this.active = status;
-    })
+    this.ankiService.testConnection().subscribe(response => {
+      console.log(response);
+      if (!response || !response.result) {
+        this.active = false;
+      } else {
+        this.active = true;
+      }
+    });
   }
 }

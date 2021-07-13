@@ -1,6 +1,7 @@
 package ankihelper.server.managers;
 
 import app.AnkiHelperApp;
+import filereader.DocumentReader;
 import models.AnkiRequestBody;
 import models.Note;
 import org.springframework.stereotype.Component;
@@ -15,9 +16,14 @@ public class AnkiManager {
     private ArrayList<Note> clozeNotes;
     private ArrayList<Note> basicNotes;
     private ArrayList<Note> reversedNotes;
+    private ArrayList<Note> tableNotes;
 
     public AnkiManager() {
         this.ankiHelper = AnkiHelperApp.initializeAnkiHelper();
+        clozeNotes = new ArrayList<>();
+        basicNotes = new ArrayList<>();
+        reversedNotes = new ArrayList<>();
+        tableNotes = new ArrayList<>();
     }
 
 
@@ -27,10 +33,17 @@ public class AnkiManager {
         } else {
             ankiHelper.analyzeDocument(filePath, deckName);
         }
+        if (filePath.endsWith(".docx") || filePath.endsWith(".doc")) {
+            performBasicReversedNoteAnalysis();
+            performNameAndDescribeAnalysis();
+            performBasicNoteAnalysis();
+        } else if (filePath.endsWith(".xlsx") || filePath.endsWith(".xls")) {
+            performTableNoteAnalysis();
+        }
+    }
 
-        performNameAndDescribeAnalysis();
-        performBasicNoteAnalysis();
-        performBasicReversedNoteAnalysis();
+    private void performTableNoteAnalysis() {
+        tableNotes = ankiHelper.analyzeTables();
     }
 
     private void performNameAndDescribeAnalysis() {
@@ -55,5 +68,8 @@ public class AnkiManager {
 
     public ArrayList<Note> getReversedNotes() {
         return reversedNotes;
+    }
+
+    public ArrayList<Note> getTableNotes() { return tableNotes;
     }
 }

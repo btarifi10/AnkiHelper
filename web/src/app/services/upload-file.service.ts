@@ -25,7 +25,7 @@ export class UploadFileService {
     return this.http.request(req);
   }
 
-  deleteFile(filename : string): Observable<HttpEvent<any>> {
+  deleteFile(filename: string): Observable<HttpEvent<any>> {
 
     const req = new HttpRequest('DELETE', `${this.baseUrl}/?filename=${filename}`, {
       reportProgress: true,

@@ -2,3 +2,4 @@ ui/AnkiWrapperGui.java
  ui.AnkiWrapperGui
  ui.AnkiWrapperGui$1
  ui.AnkiWrapperGui$2
+ ui.AnkiWrapperGui$3

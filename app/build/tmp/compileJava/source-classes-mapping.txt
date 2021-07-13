@@ -1,5 +1,5 @@
-filereader/DOCXReader.java
- filereader.DOCXReader
+models/Cloze.java
+ models.Cloze
 models/Basic.java
  models.Basic
 models/BasicAndReversed.java
@@ -12,5 +12,5 @@ models/AnkiRequestBody.java
  models.AnkiRequestBody
 app/AnkiHelperApp.java
  app.AnkiHelperApp
-models/Cloze.java
- models.Cloze
+filereader/DocumentReader.java
+ filereader.DocumentReader

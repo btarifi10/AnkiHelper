@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AnkiService} from "../../services/anki.service";
 import {UploadFileService} from "../../services/upload-file.service";
-import {AnkiResponseBody} from "../../models/AnkiResponseBody";
+import {AnkiResponseBody} from "../../models/AnkiRequestResponse";
 import {Note} from "../../models/Note";
 
 @Component({
@@ -24,8 +24,8 @@ export class AddNewCardsComponent implements OnInit {
   constructor(private ankiService : AnkiService) { }
 
   ngOnInit(): void {
-    this.ankiService.getDecks().subscribe( decks => {
-      this.deckNames = decks;
+    this.ankiService.getDecks().subscribe( response => {
+      this.deckNames = response.result;
     });
   }
 
@@ -75,4 +75,10 @@ export class AddNewCardsComponent implements OnInit {
     this.newDeck = false;
     this.readDeckFromNotes=false;
   }
+
+  deleteNote(note: Note) {
+    const index = this.notesToBeAdded.indexOf(note);
+    if (index > -1)
+      this.notesToBeAdded.splice(index, 1);
+    }
 }

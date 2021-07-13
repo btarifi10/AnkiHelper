@@ -129,6 +129,7 @@ public class AnkiController {
             this.notesFound.addAll(ankiManager.getClozeNotes());
             this.notesFound.addAll(ankiManager.getBasicNotes());
             this.notesFound.addAll(ankiManager.getReversedNotes());
+            this.notesFound.addAll(ankiManager.getTableNotes());
         }
 
 

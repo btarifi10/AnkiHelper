@@ -1,8 +1,9 @@
 package app;
 
-import filereader.DOCXReader;
+import filereader.DocumentReader;
 import models.Note;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import static java.lang.Integer.parseInt;
@@ -10,6 +11,7 @@ import static java.lang.Integer.parseInt;
 public class AnkiHelperApp {
 
     private ArrayList<String> allPars;
+    private ArrayList<ArrayList<ArrayList<String>>> allTables;
     private boolean deckIncluded;
     private String deckName;
 
@@ -21,14 +23,25 @@ public class AnkiHelperApp {
     }
 
     public void analyzeDocument(String filePath, String deckName) {
-        this.allPars = DOCXReader.getAllParagraphs(filePath);
+        if (filePath.endsWith(".docx") || filePath.endsWith(".doc"))
+            this.allPars = DocumentReader.getAllParagraphs(filePath);
+        else if (filePath.endsWith(".xlsx") || filePath.endsWith(".xls"))
+            this.allTables = DocumentReader.getExcelTables(filePath);
         this.deckName = deckName;
         this.deckIncluded = false;
     }
 
     public void analyzeDocument(String filePath) {
-        this.allPars = DOCXReader.getAllParagraphs(filePath);
+        if (filePath.endsWith(".docx") || filePath.endsWith(".doc"))
+            this.allPars = DocumentReader.getAllParagraphs(filePath);
         this.deckIncluded = true;
+    }
+
+    public ArrayList<Note> analyzeTables() {
+        if (this.allTables.size() > 0) {
+            return scanDocumentForTables();
+        } else
+            return new ArrayList<>();
     }
 
     public ArrayList<Note> analyzeNameAndDescribe() {
@@ -41,6 +54,34 @@ public class AnkiHelperApp {
 
     public ArrayList<Note> analyzeReversedFormat() {
         return scanDocumentForBasicFormat("Reversed");
+    }
+
+    private ArrayList<Note> scanDocumentForTables() {
+        ArrayList<Note> tableNotes = new ArrayList<>();
+        for (ArrayList<ArrayList<String>> table : allTables) {
+            ArrayList<String> headerRow = table.get(0);
+            String columnHeadings = String.join("</br>", headerRow.subList(1, headerRow.size()));
+            boolean isHeader = true;
+            for (ArrayList<String> row : table) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+
+                String front = headerRow.get(0)+ ": " + row.get(0);
+                front += "</br></br>";
+                front += columnHeadings;
+
+                String back = String.join("</br>", row.subList(1, row.size()));
+                String model = "Basic";
+
+                Note note = new Note(this.deckName, model, front, back);
+
+                tableNotes.add(note);
+            }
+        }
+
+        return tableNotes;
     }
 
     private ArrayList<Note> scanDocumentForBasicFormat(String keyword) {

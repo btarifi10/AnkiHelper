@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpEvent, HttpRequest} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {AnkiResponseBody} from "../models/AnkiResponseBody";
-import {Note} from "../models/Note";
+import {AnkiResponseBody} from '../models/AnkiRequestResponse';
+import {Note} from '../models/Note';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +10,17 @@ import {Note} from "../models/Note";
 export class AnkiService {
 
   private baseUrl = '/api';
+  private ankiServer = 'http://localhost:8765';
 
   constructor(private http: HttpClient) { }
 
   getDecks(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/decks`);
+    const body = {
+      action: 'deckNames',
+      version: 6
+    };
+
+    return this.http.post(this.ankiServer, body);
   }
 
   proceed(selectedDeck: string): Observable<Note[]> {
@@ -26,7 +32,17 @@ export class AnkiService {
     return this.http.get<AnkiResponseBody[]>(`${this.baseUrl}/confirm`);
   }
 
-  testConnection() : Observable<boolean>{
-    return this.http.get<boolean>(`${this.baseUrl}/test`);
+  testConnection(): Observable<any>{
+    const body = {
+      action: 'version',
+      version: 6
+    };
+    return this.http.post(this.ankiServer, body, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': 'http://localhost:8765/'
+      }
+    });
   }
 }

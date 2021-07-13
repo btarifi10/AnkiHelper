@@ -7,6 +7,4 @@ export class AnkiResponseBody {
         this.result = result;
         this.error = error;
     }
-
-
 }

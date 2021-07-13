@@ -1,4 +1,3 @@
-
 export class Note {
     deckName : string;
     modelName : string;
