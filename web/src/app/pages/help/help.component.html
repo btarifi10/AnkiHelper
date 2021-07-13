@@ -8,9 +8,19 @@
         <p>
           Before you can use this app, ensure that <i>Anki</i> is running and that the <a
           href="https://ankiweb.net/shared/info/2055492159"><i>Anki Connect</i></a> add-on is
-          installed. If it isn't, click the link and follow the instructions to downloading it.<br><br>
+          installed. If it isn't, click the link and follow the instructions to downloading it.
+          Once the add on is installed, click <em>Tools > Add-ons</em> to configure the add on.
+          <em>AnkiConnect</em> should be on the list - click it and then click the <em>Config</em>
+          button. Under "webCorsOriginList", add this site's URL as per the image below:<br>
+        </p>
 
-          Also, this app only works with Microsoft Word documents that have a <i>.docx</i> file extension. This
+        <div class="text-center">
+          <img src="../../assets/anki-ex.png" width="600px">
+        </div>
+        <br>
+        <p>
+          All this does is allow the site to communicate with Anki. <br><br>
+          Also, this app only works with Microsoft Word or Excel documents that have a <i>.docx</i> or <i>.xlsx</i> file extension. This
           shouldn't be
           a problem unless you are using a very old version of Word. If you are, and have <i>.doc</i> file extension,
           you
@@ -103,6 +113,25 @@
         <br><br>
 
         <a href="{{exampleFiles[1].url}}"> Download example file </a>
+
+        <hr/>
+
+
+        <h5>Cards from Excel Tables</h5>
+        Tables inserted into a Microsoft Excel document will be analysed. It assumes the
+        table was inserted using the <em>Insert > Table</em> command (or else it is not
+        actually a table, just an arrangement of lines). The column and row headers are
+        assumed to be descriptive of the table contents. An example of a table is given below:
+        <br>
+        <div class="text-center py-2">
+            <img src="../../assets/table-ex.png" width="450px">
+        </div>
+        <br>
+        In this case, six cards would be created, one for each student. At the moment, an Excel document
+        requires the deck to be already specified (i.e., not within the document but selected on the site).
+        <br><br>
+
+        <a href="{{exampleFiles[2].url}}"> Download example file </a>
 
         <hr/>
 

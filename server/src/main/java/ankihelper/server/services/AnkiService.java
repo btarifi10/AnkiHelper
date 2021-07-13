@@ -100,6 +100,7 @@ public class AnkiService {
     private AnkiResponseBody bindJSONResponse(HttpResponse<String> response) {
         AnkiResponseBody responseBody = null;
         try {
+
             responseBody = objectMapper.readValue(response.body().toString(), AnkiResponseBody.class);
             return responseBody;
         } catch (JsonProcessingException e) {

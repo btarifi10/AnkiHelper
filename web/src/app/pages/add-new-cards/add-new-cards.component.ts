@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AnkiService} from "../../services/anki.service";
-import {UploadFileService} from "../../services/upload-file.service";
-import {AnkiResponseBody} from "../../models/AnkiRequestResponse";
+import {forkJoin, Observable} from 'rxjs';
 import {Note} from "../../models/Note";
 
 @Component({
@@ -13,11 +12,10 @@ export class AddNewCardsComponent implements OnInit {
 
   public deckNames : string[] = [];
   public selectedDeck: string;
-  public cardTitlesToReview: string[] = [];
-  public notesToBeAdded : Note[] = [];
-  public responses : AnkiResponseBody[] = null;
+  public notesToBeAdded: Note[] = [];
+  public addResponses: string[] = null;
   public stage : number = 1;
-  newDeckName: string;
+  public newDeckName: string;
   public readDeckFromNotes: boolean;
   public newDeck: boolean;
 
@@ -27,32 +25,45 @@ export class AddNewCardsComponent implements OnInit {
     this.ankiService.getDecks().subscribe( response => {
       this.deckNames = response.result;
     });
+    this.ankiService.deleteFiles();
   }
 
   proceed() {
     this.ankiService.proceed(this.selectedDeck).subscribe( notes => {
       this.notesToBeAdded = notes;
-      this.responses = null;
+      this.addResponses = null;
       this.stage = 3;
-
     });
+  }
+
+  postNotes(notesToAdd: Note[]) {
+    const responses = [];
+
+    let observables = notesToAdd.map(note => {
+      return this.ankiService.postNoteToAnki(note)
+    });
+
+    forkJoin(observables).subscribe(resList => {
+      for (const response of resList){
+        if (!response) {
+          responses.push(response);
+        } else if (response.error) {
+          responses.push(response.error);
+        } else {
+          responses.push(`Card created with ID ${response.result}.`);
+        }
+      }
+    });
+    return responses;
   }
 
   confirm() {
-    this.ankiService.confirm().subscribe( responses => {
-      this.responses = responses;
-    });
+    this.addResponses = this.postNotes(this.notesToBeAdded);
+    this.ankiService.deleteFiles();
   }
 
   getCardResponse(note : Note) : string {
-    let response: AnkiResponseBody = this.responses[this.notesToBeAdded.indexOf(note)];
-
-    if (response.error) {
-      return response.error;
-    } else {
-      return `Card created with ID ${response.result}.`;
-    }
-
+    return this.addResponses[this.notesToBeAdded.indexOf(note)];
   }
 
   getNoteFirstLine(note: Note) : string {
@@ -81,4 +92,15 @@ export class AddNewCardsComponent implements OnInit {
     if (index > -1)
       this.notesToBeAdded.splice(index, 1);
     }
+
+  clickDeckSelected() {
+    this.stage = 2;
+    if (this.newDeck) {
+      this.ankiService.createNewAnkiDeck(this.newDeckName).subscribe(() => {
+        this.ankiService.getDecks().subscribe(res => {
+          this.deckNames = res.result;
+        });
+      })
+    }
+  }
 }

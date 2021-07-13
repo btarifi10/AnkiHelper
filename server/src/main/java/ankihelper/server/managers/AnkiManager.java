@@ -72,4 +72,12 @@ public class AnkiManager {
 
     public ArrayList<Note> getTableNotes() { return tableNotes;
     }
+
+    public void clearAll() {
+        clozeNotes = new ArrayList<>();
+        basicNotes = new ArrayList<>();
+        reversedNotes = new ArrayList<>();
+        tableNotes = new ArrayList<>();
+        ankiHelper.clearAll();
+    }
 }

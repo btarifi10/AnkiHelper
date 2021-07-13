@@ -36,7 +36,7 @@
           <hr/>
 
           <button class="btn btn-sm btn-outline-primary mr-2"
-                  (click)="stage=2;
+                  (click)="clickDeckSelected();
               acc.toggle('deck-select');
               acc.toggle('file-upload')"> Continue
           </button>
@@ -82,8 +82,8 @@
               <td>{{getNoteFirstLine(note)}}</td>
               <td>{{note.deckName}}</td>
               <td>{{note.modelName}}</td>
-              <td *ngIf="!responses">Pending <button class="btn btn-danger btn-sm" (click)="deleteNote(note)">Delete</button></td>
-              <td *ngIf="responses">{{getCardResponse(note)}}</td>
+              <td *ngIf="!addResponses">Pending <button class="btn btn-danger btn-sm" (click)="deleteNote(note)">Delete</button></td>
+              <td *ngIf="addResponses">{{getCardResponse(note)}}</td>
             </tr>
             </tbody>
           </table>

@@ -44,6 +44,11 @@ public class AnkiHelperApp {
             return new ArrayList<>();
     }
 
+    public void clearAll() {
+        allPars = null;
+        allTables = null;
+    }
+
     public ArrayList<Note> analyzeNameAndDescribe() {
        return scanDocumentForNameAndDescribe();
     }

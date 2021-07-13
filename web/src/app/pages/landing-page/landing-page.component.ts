@@ -17,7 +17,6 @@ export class LandingPageComponent implements OnInit {
 
   checkConnection() {
     this.ankiService.testConnection().subscribe(response => {
-      console.log(response);
       if (!response || !response.result) {
         this.active = false;
       } else {

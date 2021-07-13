@@ -96,6 +96,20 @@ public class AnkiController {
         return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
     }
 
+    @DeleteMapping ("/deleteFiles")
+    @ResponseBody
+    public ResponseEntity<ResponseMessage> deleteFiles() {
+        String message = "";
+        try {
+            storageService.deleteAll();
+            storageService.init();
+            message = "Deleted the files successfully.";
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+        } catch (Exception e) {
+            message = "Could not delete the files";
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+        }
+    }
 
 
     @DeleteMapping ("/")
@@ -104,7 +118,6 @@ public class AnkiController {
         String message = "";
         try {
             storageService.deleteFile(filename);
-
             message = "Deleted the file successfully: " + filename;
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
         } catch (Exception e) {
@@ -130,6 +143,7 @@ public class AnkiController {
             this.notesFound.addAll(ankiManager.getBasicNotes());
             this.notesFound.addAll(ankiManager.getReversedNotes());
             this.notesFound.addAll(ankiManager.getTableNotes());
+            ankiManager.clearAll();
         }
 
 
@@ -141,6 +155,7 @@ public class AnkiController {
         return notesFound;
     }
 
+    /*
     @GetMapping("/confirm")
     @ResponseBody
     public List<AnkiResponseBody> createCards() {
@@ -155,7 +170,7 @@ public class AnkiController {
 
         return responses;
     }
-
+     */
 
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
@@ -173,10 +188,13 @@ public class AnkiController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
+    /*
     @GetMapping("/decks")
     @ResponseBody
     public ArrayList<String> getDecks() {
         return ankiService.getAllDecks();
     }
+
+     */
 
 }

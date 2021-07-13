@@ -10,7 +10,7 @@ models/Note.java
  models.Note
 models/AnkiRequestBody.java
  models.AnkiRequestBody
-app/AnkiHelperApp.java
- app.AnkiHelperApp
 filereader/DocumentReader.java
  filereader.DocumentReader
+app/AnkiHelperApp.java
+ app.AnkiHelperApp

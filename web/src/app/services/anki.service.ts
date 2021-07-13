@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpEvent, HttpRequest} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import {AnkiResponseBody} from '../models/AnkiRequestResponse';
 import {Note} from '../models/Note';
 
@@ -25,11 +25,53 @@ export class AnkiService {
 
   proceed(selectedDeck: string): Observable<Note[]> {
     return this.http.get<Note[]>(`${this.baseUrl}/proceed?deckName=${selectedDeck}`);
-
   }
 
-  confirm(): Observable<AnkiResponseBody[]> {
-    return this.http.get<AnkiResponseBody[]>(`${this.baseUrl}/confirm`);
+  createNewAnkiDeck(deckName: string): Observable<any> {
+    const body = {
+      action: 'createDeck',
+      version: 6,
+      params: {
+        deck: deckName
+      }
+    };
+
+    return this.http.post(this.ankiServer, body);
+  }
+
+  postNoteToAnki(note: Note): Observable<any> {
+    let notefields = null;
+
+    if (note.modelName === 'Cloze') {
+      notefields = {
+        Text: note.front,
+        'Back Extra': note.back
+      };
+    } else {
+      notefields = {
+        Front: note.front,
+        Back: note.back
+      };
+    }
+
+    const body = {
+      action: 'addNote',
+      version: 6,
+      params: {
+        note: {
+          deckName: note.deckName,
+          modelName: note.modelName,
+          fields: notefields
+        }
+      }
+    };
+
+    return this.http.post(this.ankiServer, body);
+  }
+
+
+  deleteFiles(): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/deleteFiles`);
   }
 
   testConnection(): Observable<any>{
@@ -37,12 +79,6 @@ export class AnkiService {
       action: 'version',
       version: 6
     };
-    return this.http.post(this.ankiServer, body, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Access-Control-Allow-Origin': 'http://localhost:8765/'
-      }
-    });
+    return this.http.post(this.ankiServer, body);
   }
 }

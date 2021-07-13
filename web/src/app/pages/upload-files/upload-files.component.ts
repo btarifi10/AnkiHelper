@@ -23,6 +23,10 @@ export class UploadFilesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.updateFiles()
+  }
+
+  updateFiles() : void {
     this.uploadService.getFiles().subscribe(files => {
       this.fileInfos = files;
     });
@@ -59,14 +63,14 @@ export class UploadFilesComponent implements OnInit {
   deleteFile(filename: string) {
     this.uploadService.deleteFile(filename).subscribe(
       event => {
-        console.log("File deleted successfully.");
+        // console.log("File deleted successfully.");
+        this.uploadService.getFiles().subscribe(files => {
+          this.fileInfos = files;
+        });
       },
       error => {
-        console.log("Could not delete the file!");
+          window.alert("Could not delete the file!");
       });
 
-    this.uploadService.getFiles().subscribe(files => {
-      this.fileInfos = files;
-    });
   }
 }
